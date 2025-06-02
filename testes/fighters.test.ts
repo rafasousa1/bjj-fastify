@@ -1,4 +1,5 @@
-import { expect, test, beforeAll, afterAll, describe } from 'vitest'
+import { expect, test, beforeAll, afterAll, describe, beforeEach } from 'vitest'
+import { execSync } from 'node:child_process'
 import request from 'supertest'
 import { app } from '../src/app'
 
@@ -9,6 +10,11 @@ describe('Rotas dos lutadores', () => {
 
 	afterAll(async () => {
 		app.close()
+	})
+
+	beforeEach(() => {
+		execSync('npm run knex migrate:rollback --all')
+		execSync('npm run knex migrate:latest')
 	})
 
 	test('Usuário pode criar seu cadastro na academia de Jiu-Jitsu', async () => {
@@ -44,5 +50,36 @@ describe('Rotas dos lutadores', () => {
 				faixa: 'Preta'
 			})
 		])
+	})
+
+	test('Usuário pode listar um lutador específico', async () => {
+		const criarNovoLutador = await request(app.server)
+			.post('/bjj')
+			.send({
+				nome: 'Charles',
+				faixa: 'Preta',
+				peso: 88
+			})
+
+		const cookies = criarNovoLutador.headers['set-cookie']
+
+		const listarLutadores = await request(app.server)
+			.get('/bjj')
+			.set('Cookie', cookies)
+			.expect(200)
+
+		const lutadorId = listarLutadores.body.bjjs[0].id
+
+		const listarLutador = await request(app.server)
+			.get(`/bjj/${lutadorId}`)
+			.set('Cookie', cookies)
+			.expect(200)
+
+		expect(listarLutador.body.bjj).toEqual(
+			expect.objectContaining({
+				nome: 'Charles',
+				faixa: 'Preta'
+			})
+		)
 	})
 })

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "knex": "tsx ./node_modules/knex/bin/cli.js",
+    "build": "tsup src --out-dir build",
     "lint": "eslint . --ext .ts",
     "test": "npx vitest"
   },
@@ -31,6 +32,7 @@
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.2",
     "globals": "^16.0.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1"

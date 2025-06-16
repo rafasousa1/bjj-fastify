@@ -85,4 +85,23 @@ export async function fightersRoutes(app: FastifyInstance) {
 
 		return reply.status(204).send()
 	})
+
+	app.put('/:id', async (req, reply) => {
+		const paramsSchemaId = z.object({
+			id: z.string().uuid()
+		})
+
+		const bodySchema = z.object({
+			nome: z.string(),
+			faixa: z.string(),
+			peso: z.number()
+		})
+
+		const { id } = paramsSchemaId.parse(req.params)
+		const data = bodySchema.parse(req.body)
+
+		await db('bjj').where('id', id).update(data)
+
+		return reply.status(200).send()
+	})
 }

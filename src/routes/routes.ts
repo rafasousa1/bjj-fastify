@@ -73,4 +73,16 @@ export async function fightersRoutes(app: FastifyInstance) {
 
 		return reply.status(201).send()
 	})
+
+	app.delete('/:id', async (req, reply) => {
+		const fighterId = z.object({
+			id: z.string().uuid()
+		})
+
+		const { id } = fighterId.parse(req.params)
+
+		await db('bjj').where('id', id).del()
+
+		return reply.status(204).send()
+	})
 }

@@ -106,4 +106,46 @@ describe('Rotas dos lutadores', () => {
 			.set('Cookie', cookies)
 			.expect(204)
 	})
+
+	test('Usuário pode atualizar um lutador cadastrado', async () => {
+		const criarNovoLutador = await request(app.server)
+			.post('/bjj')
+			.send({
+				nome: 'Charles',
+				faixa: 'Preta',
+				peso: 88
+			})
+		
+		const cookies = criarNovoLutador.headers['set-cookie']
+
+		const listarLutadores = await request(app.server)
+			.get('/bjj')
+			.set('Cookie', cookies)
+			.expect(200)
+
+		const lutadorId = listarLutadores.body.bjjs[0].id
+
+		await request(app.server)
+			.put(`/bjj/${lutadorId}`)
+			.set('Cookie', cookies)
+			.send({
+				nome: 'Charles Oliveira',
+				faixa: 'Preta',
+				peso: 88
+			})
+			.expect(200)
+		
+		const buscarLutador = await request(app.server)
+			.get(`/bjj/${lutadorId}`)
+			.set('Cookie', cookies)
+			.expect(200)
+
+		expect(buscarLutador.body.bjj).toEqual(
+			expect.objectContaining({
+				nome: 'Charles Oliveira',
+				faixa: 'Preta',
+				peso: 88
+			})
+		)
+	})
 })

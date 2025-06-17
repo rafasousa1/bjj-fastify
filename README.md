@@ -1,6 +1,7 @@
 # API de cadastro de lutadores 🥋
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/typescript-%23323330.svg?style=for-the-badge&logo=typescript&logoColor=%23F7DF1E)
+![Fastify](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Knex.js](https://img.shields.io/badge/Knex.js-222222?style=for-the-badge&logo=knex&logoColor=white)
 
 ## Descrição
 API de cadastro de lutadores para uma academia de Jiu-Jitsu.

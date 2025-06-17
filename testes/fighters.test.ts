@@ -17,7 +17,7 @@ describe('Rotas dos lutadores', () => {
 		execSync('npm run knex migrate:latest')
 	})
 
-	test('Usuário pode criar seu cadastro na academia de Jiu-Jitsu', async () => {
+	test('Usuário pode criar seu cadastro na academia de Jiu-Jitsu', async () => { //post
 		await request(app.server)
 			.post('/bjj')
 			.send({
@@ -28,7 +28,7 @@ describe('Rotas dos lutadores', () => {
 			.expect(201)
 	})
 
-	test('Usuário pode listar todos os lutadores cadastrados', async () => {
+	test('Usuário pode listar todos os lutadores cadastrados', async () => { // get
 		const criarNovoLutador = await request(app.server)
 			.post('/bjj')
 			.send({
@@ -52,7 +52,7 @@ describe('Rotas dos lutadores', () => {
 		])
 	})
 
-	test('Usuário pode listar um lutador específico', async () => {
+	test('Usuário pode listar um lutador específico', async () => { // get pelo id
 		const criarNovoLutador = await request(app.server)
 			.post('/bjj')
 			.send({
@@ -81,5 +81,29 @@ describe('Rotas dos lutadores', () => {
 				faixa: 'Preta'
 			})
 		)
+	})
+
+	test('Usuário pode deletar um lutador cadastrado', async () => {
+		const criarNovoLutador = await request(app.server)
+			.post('/bjj')
+			.send({
+				nome: 'Charles',
+				faixa: 'Preta',
+				peso: 88
+			})
+		
+		const cookies = criarNovoLutador.headers['set-cookie']
+
+		const listarLutadores = await request(app.server)
+			.get('/bjj')
+			.set('Cookie', cookies)
+			.expect(200)
+
+		const lutadorId = listarLutadores.body.bjjs[0].id
+
+		await request(app.server)
+			.delete(`/bjj/${lutadorId}`)
+			.set('Cookie', cookies)
+			.expect(204)
 	})
 })
